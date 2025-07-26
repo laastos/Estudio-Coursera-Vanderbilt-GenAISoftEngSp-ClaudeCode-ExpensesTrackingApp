@@ -1,6 +1,6 @@
 import { SupportedLocale, SupportedCurrency, CurrencyInfo } from '@/types/i18n';
 
-export const SUPPORTED_LOCALES: SupportedLocale[] = ['en', 'es', 'fr', 'de', 'pt'];
+export const SUPPORTED_LOCALES: SupportedLocale[] = ['en', 'es', 'fr', 'de', 'pt', 'ja', 'zh'];
 export const SUPPORTED_CURRENCIES: SupportedCurrency[] = ['USD', 'EUR', 'GBP', 'JPY', 'CAD', 'AUD', 'CHF', 'CNY', 'MXN', 'BRL'];
 
 export const CURRENCY_INFO: Record<SupportedCurrency, CurrencyInfo> = {
@@ -25,6 +25,8 @@ export const LOCALE_CURRENCY_MAP: Record<SupportedLocale, SupportedCurrency> = {
   fr: 'EUR',
   de: 'EUR',
   pt: 'BRL',
+  ja: 'JPY',
+  zh: 'CNY',
 };
 
 export const LOCALE_NAMES: Record<SupportedLocale, string> = {
@@ -33,6 +35,8 @@ export const LOCALE_NAMES: Record<SupportedLocale, string> = {
   fr: 'Français',
   de: 'Deutsch',
   pt: 'Português',
+  ja: '日本語',
+  zh: '中文',
 };
 
 // Exchange rates (in a real app, these would come from an API)

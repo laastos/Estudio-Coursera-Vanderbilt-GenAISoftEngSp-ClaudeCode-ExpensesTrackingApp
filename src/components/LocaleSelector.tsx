@@ -74,12 +74,13 @@ export default function LocaleSelector() {
               
               <div className="mt-4 pt-4 border-t border-gray-200">
                 <p className="text-xs text-gray-500">
-                  {locale === 'en' 
-                    ? 'Currency conversion rates are approximate and for display purposes only.'
-                    : locale === 'es'
-                    ? 'Las tasas de conversión de moneda son aproximadas y solo para fines de visualización.'
-                    : 'Currency conversion rates are approximate and for display purposes only.'
-                  }
+                  {locale === 'en' && 'Currency conversion rates are approximate and for display purposes only.'}
+                  {locale === 'es' && 'Las tasas de conversión de moneda son aproximadas y solo para fines de visualización.'}
+                  {locale === 'fr' && 'Les taux de conversion des devises sont approximatifs et à des fins d\'affichage uniquement.'}
+                  {locale === 'de' && 'Währungsumrechnungskurse sind ungefähr und nur für Anzeigezwecke.'}
+                  {locale === 'pt' && 'As taxas de conversão de moeda são aproximadas e apenas para fins de exibição.'}
+                  {locale === 'ja' && '通貨換算レートは概算であり、表示目的のみです。'}
+                  {locale === 'zh' && '货币转换汇率仅为近似值，仅用于显示目的。'}
                 </p>
               </div>
             </div>

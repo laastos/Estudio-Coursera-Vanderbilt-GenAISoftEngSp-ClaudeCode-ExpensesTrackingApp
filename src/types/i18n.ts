@@ -1,4 +1,4 @@
-export type SupportedLocale = 'en' | 'es' | 'fr' | 'de' | 'pt';
+export type SupportedLocale = 'en' | 'es' | 'fr' | 'de' | 'pt' | 'ja' | 'zh';
 
 export type SupportedCurrency = 'USD' | 'EUR' | 'GBP' | 'JPY' | 'CAD' | 'AUD' | 'CHF' | 'CNY' | 'MXN' | 'BRL';
 

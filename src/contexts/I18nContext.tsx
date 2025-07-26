@@ -41,7 +41,7 @@ export function I18nProvider({ children }: I18nProviderProps) {
         } else {
           // Try to detect browser language
           const browserLang = navigator.language.split('-')[0] as SupportedLocale;
-          if (['en', 'es', 'fr', 'de', 'pt'].includes(browserLang)) {
+          if (['en', 'es', 'fr', 'de', 'pt', 'ja', 'zh'].includes(browserLang)) {
             setLocaleState(browserLang);
             setCurrencyState(LOCALE_CURRENCY_MAP[browserLang]);
             setTranslations(getTranslation(browserLang));

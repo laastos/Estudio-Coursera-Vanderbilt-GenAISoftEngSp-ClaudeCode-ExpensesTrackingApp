@@ -12,7 +12,7 @@ A modern, professional NextJS expense tracking application that helps users mana
 - **Data Persistence**: All data is stored locally using localStorage with automatic migration
 
 ### 🌍 Internationalization & Currency Support
-- **Multiple Languages**: English, Spanish (with fallbacks for French, German, Portuguese)
+- **Multiple Languages**: English, Spanish, French, German, Portuguese, Japanese, Chinese
 - **10+ Currencies**: USD, EUR, GBP, JPY, CAD, AUD, CHF, CNY, MXN, BRL
 - **Real-time Currency Conversion**: Automatic conversion with visual indicators
 - **Locale-aware Formatting**: Dates and numbers formatted according to user's locale
@@ -268,7 +268,7 @@ Potential features that could be added:
 - Advanced reporting and insights
 - Receipt photo uploads
 - **Live exchange rates** via API integration
-- **Additional languages** (French, German, Portuguese with full translations)
+- **Additional languages** and regional variants
 - **Custom categories** with user-defined names
 - **Income tracking** alongside expenses
 - Data backup/restore to cloud storage

@@ -65,7 +65,7 @@ interface Expense {
 The application supports multiple languages and currencies with automatic conversion and localization.
 
 ### Supported Features
-- **Languages**: English, Spanish (with fallbacks for French, German, Portuguese)
+- **Languages**: English, Spanish, French, German, Portuguese, Japanese, Chinese
 - **Currencies**: USD, EUR, GBP, JPY, CAD, AUD, CHF, CNY, MXN, BRL
 - **Automatic currency conversion** with static exchange rates
 - **Locale-aware formatting** for dates and numbers
