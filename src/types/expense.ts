@@ -1,9 +1,12 @@
+import { SupportedCurrency } from './i18n';
+
 export type ExpenseCategory = 'Food' | 'Transportation' | 'Entertainment' | 'Shopping' | 'Bills' | 'Other';
 
 export interface Expense {
   id: string;
   date: string;
   amount: number;
+  currency: SupportedCurrency;
   category: ExpenseCategory;
   description: string;
   createdAt: string;
@@ -13,6 +16,7 @@ export interface Expense {
 export interface ExpenseFormData {
   date: string;
   amount: string;
+  currency: SupportedCurrency;
   category: ExpenseCategory;
   description: string;
 }

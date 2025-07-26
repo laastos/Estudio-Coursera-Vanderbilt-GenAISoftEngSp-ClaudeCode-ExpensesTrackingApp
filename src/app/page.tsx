@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Expense, ExpenseFormData } from '@/types/expense';
 import { useExpenses } from '@/hooks/useExpenses';
+import { useI18n } from '@/contexts/I18nContext';
 import Navigation from '@/components/Navigation';
 import Dashboard from '@/components/Dashboard';
 import ExpenseForm from '@/components/ExpenseForm';
@@ -14,6 +15,7 @@ export default function Home() {
   const [currentView, setCurrentView] = useState<View>('dashboard');
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const { expenses, isLoading, addExpense, updateExpense, deleteExpense } = useExpenses();
+  const { t } = useI18n();
 
   const handleAddExpense = (formData: ExpenseFormData) => {
     addExpense(formData);
@@ -39,7 +41,7 @@ export default function Home() {
   };
 
   const handleDeleteExpense = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this expense?')) {
+    if (window.confirm(t.expense.deleteExpenseConfirm)) {
       deleteExpense(id);
     }
   };
@@ -49,7 +51,7 @@ export default function Home() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading your expenses...</p>
+          <p className="mt-4 text-gray-600">{t.common.loading}</p>
         </div>
       </div>
     );
@@ -63,7 +65,7 @@ export default function Home() {
         {currentView === 'dashboard' && (
           <div>
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+              <h1 className="text-3xl font-bold text-gray-900">{t.navigation.dashboard}</h1>
               <p className="mt-2 text-gray-600">Overview of your spending</p>
             </div>
             <Dashboard expenses={expenses} />
@@ -73,7 +75,7 @@ export default function Home() {
         {currentView === 'expenses' && (
           <div>
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900">All Expenses</h1>
+              <h1 className="text-3xl font-bold text-gray-900">{t.navigation.expenses}</h1>
               <p className="mt-2 text-gray-600">View and manage your expenses</p>
             </div>
             <ExpenseList 
@@ -88,7 +90,7 @@ export default function Home() {
           <div>
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-gray-900">
-                {editingExpense ? 'Edit Expense' : 'Add New Expense'}
+                {editingExpense ? t.expense.editExpense : t.expense.addExpense}
               </h1>
               <p className="mt-2 text-gray-600">
                 {editingExpense ? 'Update your expense details' : 'Record a new expense'}
@@ -99,6 +101,7 @@ export default function Home() {
               initialData={editingExpense ? {
                 date: editingExpense.date,
                 amount: editingExpense.amount.toString(),
+                currency: editingExpense.currency,
                 category: editingExpense.category,
                 description: editingExpense.description,
               } : undefined}

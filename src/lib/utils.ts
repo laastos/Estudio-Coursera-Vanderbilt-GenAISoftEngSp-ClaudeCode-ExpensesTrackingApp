@@ -1,12 +1,15 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { Expense, ExpenseCategory, ExpenseSummary, ExpenseFilters } from '@/types/expense';
+import { SupportedCurrency } from '@/types/i18n';
+import { convertCurrency } from '@/lib/i18n';
 import { format, startOfMonth, endOfMonth, isWithinInterval, parseISO } from 'date-fns';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// Keep legacy formatCurrency for backwards compatibility
 export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -48,17 +51,23 @@ export function filterExpenses(expenses: Expense[], filters: ExpenseFilters): Ex
   });
 }
 
-export function calculateExpenseSummary(expenses: Expense[]): ExpenseSummary {
+export function calculateExpenseSummary(expenses: Expense[], targetCurrency: SupportedCurrency = 'USD'): ExpenseSummary {
   const now = new Date();
   const monthStart = startOfMonth(now);
   const monthEnd = endOfMonth(now);
   
-  const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+  // Convert all expenses to target currency
+  const convertedExpenses = expenses.map(expense => ({
+    ...expense,
+    convertedAmount: convertCurrency(expense.amount, expense.currency, targetCurrency)
+  }));
   
-  const monthlyExpenses = expenses.filter(expense => 
+  const totalExpenses = convertedExpenses.reduce((sum, expense) => sum + expense.convertedAmount, 0);
+  
+  const monthlyExpenses = convertedExpenses.filter(expense => 
     isWithinInterval(parseISO(expense.date), { start: monthStart, end: monthEnd })
   );
-  const monthlyTotal = monthlyExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+  const monthlyTotal = monthlyExpenses.reduce((sum, expense) => sum + expense.convertedAmount, 0);
   
   const categoryTotals: Record<ExpenseCategory, number> = {
     Food: 0,
@@ -69,8 +78,8 @@ export function calculateExpenseSummary(expenses: Expense[]): ExpenseSummary {
     Other: 0,
   };
   
-  expenses.forEach(expense => {
-    categoryTotals[expense.category] += expense.amount;
+  convertedExpenses.forEach(expense => {
+    categoryTotals[expense.category] += expense.convertedAmount;
   });
   
   const topCategory = Object.entries(categoryTotals)
@@ -89,10 +98,11 @@ export function calculateExpenseSummary(expenses: Expense[]): ExpenseSummary {
 }
 
 export function exportToCSV(expenses: Expense[]): string {
-  const headers = ['Date', 'Amount', 'Category', 'Description'];
+  const headers = ['Date', 'Amount', 'Currency', 'Category', 'Description'];
   const rows = expenses.map(expense => [
     expense.date,
     expense.amount.toString(),
+    expense.currency,
     expense.category,
     expense.description
   ]);

@@ -1,6 +1,22 @@
 import { Expense } from '@/types/expense';
+import { SupportedCurrency } from '@/types/i18n';
 
 const STORAGE_KEY = 'expense-tracker-data';
+const MIGRATION_VERSION_KEY = 'expense-tracker-migration-version';
+const CURRENT_VERSION = 1;
+
+// Migration function to add currency field to existing expenses
+function migrateExpenses(expenses: Expense[]): Expense[] {
+  return expenses.map(expense => {
+    if (!expense.currency) {
+      return {
+        ...expense,
+        currency: 'USD' as SupportedCurrency, // Default to USD for existing expenses
+      };
+    }
+    return expense;
+  });
+}
 
 export const storage = {
   getExpenses: (): Expense[] => {
@@ -8,7 +24,20 @@ export const storage = {
     
     try {
       const data = localStorage.getItem(STORAGE_KEY);
-      return data ? JSON.parse(data) : [];
+      if (!data) return [];
+      
+      const expenses = JSON.parse(data);
+      
+      // Check if migration is needed
+      const migrationVersion = localStorage.getItem(MIGRATION_VERSION_KEY);
+      if (!migrationVersion || parseInt(migrationVersion) < CURRENT_VERSION) {
+        const migratedExpenses = migrateExpenses(expenses);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(migratedExpenses));
+        localStorage.setItem(MIGRATION_VERSION_KEY, CURRENT_VERSION.toString());
+        return migratedExpenses;
+      }
+      
+      return expenses;
     } catch (error) {
       console.error('Error reading from localStorage:', error);
       return [];

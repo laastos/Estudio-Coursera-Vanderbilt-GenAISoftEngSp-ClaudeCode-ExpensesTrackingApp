@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { Menu, X, BarChart3, Plus, List, Home } from 'lucide-react';
+import { useI18n } from '@/contexts/I18nContext';
+import LocaleSelector from './LocaleSelector';
 import { cn } from '@/lib/utils';
 
 interface NavigationProps {
@@ -11,11 +13,12 @@ interface NavigationProps {
 
 export default function Navigation({ currentView, onViewChange }: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { t } = useI18n();
 
   const navItems = [
-    { id: 'dashboard' as const, label: 'Dashboard', icon: Home },
-    { id: 'expenses' as const, label: 'Expenses', icon: List },
-    { id: 'add' as const, label: 'Add Expense', icon: Plus },
+    { id: 'dashboard' as const, label: t.navigation.dashboard, icon: Home },
+    { id: 'expenses' as const, label: t.navigation.expenses, icon: List },
+    { id: 'add' as const, label: t.navigation.addExpense, icon: Plus },
   ];
 
   const handleNavClick = (view: 'dashboard' | 'expenses' | 'add') => {
@@ -54,6 +57,7 @@ export default function Navigation({ currentView, onViewChange }: NavigationProp
                 </button>
               );
             })}
+            <LocaleSelector />
           </div>
 
           {/* Mobile menu button */}
@@ -94,6 +98,9 @@ export default function Navigation({ currentView, onViewChange }: NavigationProp
                 </button>
               );
             })}
+            <div className="px-3 py-2">
+              <LocaleSelector />
+            </div>
           </div>
         </div>
       )}

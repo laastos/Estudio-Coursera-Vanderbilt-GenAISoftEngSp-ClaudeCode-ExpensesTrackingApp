@@ -28,8 +28,11 @@ export function useExpenses() {
     const now = new Date().toISOString();
     const newExpense: Expense = {
       id: generateId(),
-      ...formData,
+      date: formData.date,
       amount: parseFloat(formData.amount),
+      currency: formData.currency,
+      category: formData.category,
+      description: formData.description,
       createdAt: now,
       updatedAt: now,
     };
@@ -49,8 +52,11 @@ export function useExpenses() {
         expense.id === id 
           ? {
               ...expense,
-              ...formData,
+              date: formData.date,
               amount: parseFloat(formData.amount),
+              currency: formData.currency,
+              category: formData.category,
+              description: formData.description,
               updatedAt: new Date().toISOString(),
             }
           : expense

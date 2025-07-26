@@ -3,7 +3,9 @@
 import { useMemo } from 'react';
 import { DollarSign, TrendingUp, CreditCard, Award } from 'lucide-react';
 import { Expense, ExpenseCategory } from '@/types/expense';
-import { calculateExpenseSummary, formatCurrency } from '@/lib/utils';
+import { calculateExpenseSummary } from '@/lib/utils';
+import { convertCurrency } from '@/lib/i18n';
+import { useI18n } from '@/contexts/I18nContext';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
 interface DashboardProps {
@@ -20,7 +22,8 @@ const COLORS = {
 };
 
 export default function Dashboard({ expenses }: DashboardProps) {
-  const summary = useMemo(() => calculateExpenseSummary(expenses), [expenses]);
+  const { t, currency, formatCurrency } = useI18n();
+  const summary = useMemo(() => calculateExpenseSummary(expenses, currency), [expenses, currency]);
 
   const chartData = useMemo(() => {
     return Object.entries(summary.categoryTotals)
@@ -46,12 +49,14 @@ export default function Dashboard({ expenses }: DashboardProps) {
                expenseDate.getFullYear() === date.getFullYear();
       });
       
-      const totalAmount = monthExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+      const totalAmount = monthExpenses.reduce((sum, expense) => 
+        sum + convertCurrency(expense.amount, expense.currency, currency), 0
+      );
       last6Months.push({ month: monthName, amount: totalAmount });
     }
     
     return last6Months;
-  }, [expenses]);
+  }, [expenses, currency]);
 
   const StatCard = ({ title, value, icon: Icon, color }: { 
     title: string; 
@@ -76,26 +81,26 @@ export default function Dashboard({ expenses }: DashboardProps) {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
-          title="Total Expenses"
+          title={t.dashboard.totalExpenses}
           value={formatCurrency(summary.totalExpenses)}
           icon={DollarSign}
           color="bg-blue-500"
         />
         <StatCard
-          title="This Month"
+          title={t.dashboard.thisMonth}
           value={formatCurrency(summary.monthlyTotal)}
           icon={TrendingUp}
           color="bg-green-500"
         />
         <StatCard
-          title="Transactions"
+          title={t.dashboard.transactions}
           value={expenses.length.toString()}
           icon={CreditCard}
           color="bg-purple-500"
         />
         <StatCard
-          title="Top Category"
-          value={summary.topCategory?.category || 'None'}
+          title={t.dashboard.topCategory}
+          value={summary.topCategory ? t.categories[summary.topCategory.category] : 'None'}
           icon={Award}
           color="bg-yellow-500"
         />
@@ -103,7 +108,7 @@ export default function Dashboard({ expenses }: DashboardProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Spending by Category</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.dashboard.spendingByCategory}</h3>
           {chartData.length > 0 ? (
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -113,7 +118,7 @@ export default function Dashboard({ expenses }: DashboardProps) {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }) => `${name}: ${((percent || 0) * 100).toFixed(0)}%`}
+                    label={({ name, percent }) => `${t.categories[name as ExpenseCategory]}: ${((percent || 0) * 100).toFixed(0)}%`}
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="value"
@@ -128,20 +133,20 @@ export default function Dashboard({ expenses }: DashboardProps) {
             </div>
           ) : (
             <div className="h-64 flex items-center justify-center text-gray-500">
-              <p>No expenses to display</p>
+              <p>{t.dashboard.noExpenses}</p>
             </div>
           )}
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Monthly Spending Trend</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.dashboard.monthlySpendingTrend}</h3>
           {monthlyData.some(data => data.amount > 0) ? (
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={monthlyData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
-                  <YAxis tickFormatter={(value) => `$${value}`} />
+                  <YAxis tickFormatter={(value) => formatCurrency(value)} />
                   <Tooltip formatter={(value) => formatCurrency(value as number)} />
                   <Bar dataKey="amount" fill="#3B82F6" />
                 </BarChart>
@@ -149,7 +154,7 @@ export default function Dashboard({ expenses }: DashboardProps) {
             </div>
           ) : (
             <div className="h-64 flex items-center justify-center text-gray-500">
-              <p>No spending data to display</p>
+              <p>{t.dashboard.noSpendingData}</p>
             </div>
           )}
         </div>
@@ -157,7 +162,7 @@ export default function Dashboard({ expenses }: DashboardProps) {
 
       {chartData.length > 0 && (
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Category Breakdown</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.dashboard.categoryBreakdown}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {chartData.map((category) => (
               <div key={category.name} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
@@ -166,7 +171,7 @@ export default function Dashboard({ expenses }: DashboardProps) {
                     className="w-4 h-4 rounded-full"
                     style={{ backgroundColor: category.color }}
                   />
-                  <span className="font-medium text-gray-900">{category.name}</span>
+                  <span className="font-medium text-gray-900">{t.categories[category.name as ExpenseCategory]}</span>
                 </div>
                 <span className="font-bold text-gray-900">
                   {formatCurrency(category.value)}

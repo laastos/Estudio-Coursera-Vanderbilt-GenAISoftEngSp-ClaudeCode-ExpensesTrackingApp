@@ -1,25 +1,35 @@
 # ExpenseTracker - Personal Finance Management App
 
-A modern, professional NextJS expense tracking application that helps users manage their personal finances with an intuitive interface and comprehensive features.
+A modern, professional NextJS expense tracking application that helps users manage their personal finances with multilingual and multicurrency support, featuring an intuitive interface and comprehensive analytics.
 
 ## 🚀 Features
 
 ### Core Functionality
-- **Add Expenses**: Create new expenses with date, amount, category, and description
-- **View Expenses**: Browse expenses in a clean, organized list with pagination
+- **Add Expenses**: Create new expenses with date, amount, currency, category, and description
+- **View Expenses**: Browse expenses in a clean, organized list with multicurrency display
 - **Filter & Search**: Filter by date range, category, and search by description
 - **Edit & Delete**: Modify or remove existing expenses with confirmation
-- **Data Persistence**: All data is stored locally using localStorage
+- **Data Persistence**: All data is stored locally using localStorage with automatic migration
+
+### 🌍 Internationalization & Currency Support
+- **Multiple Languages**: English, Spanish (with fallbacks for French, German, Portuguese)
+- **10+ Currencies**: USD, EUR, GBP, JPY, CAD, AUD, CHF, CNY, MXN, BRL
+- **Real-time Currency Conversion**: Automatic conversion with visual indicators
+- **Locale-aware Formatting**: Dates and numbers formatted according to user's locale
+- **Smart Language Detection**: Automatically detects browser language on first visit
+- **Persistent Preferences**: Language and currency choices saved across sessions
 
 ### Dashboard & Analytics
-- **Summary Cards**: Total expenses, monthly spending, transaction count, top category
-- **Visual Charts**: Pie chart for category breakdown and bar chart for monthly trends
-- **Category Breakdown**: Detailed view of spending by category with color coding
+- **Summary Cards**: Total expenses, monthly spending, transaction count, top category (all in preferred currency)
+- **Visual Charts**: Pie chart for category breakdown and bar chart for monthly trends with currency conversion
+- **Category Breakdown**: Detailed view of spending by category with color coding and multicurrency support
+- **Cross-currency Analytics**: All data automatically converted to user's preferred currency for accurate reporting
 
 ### Export & Management
-- **CSV Export**: Export filtered expenses to CSV format
+- **Enhanced CSV Export**: Export filtered expenses with currency information to CSV format
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
-- **Professional UI**: Clean, modern interface with intuitive navigation
+- **Professional UI**: Clean, modern interface with intuitive navigation and settings panel
+- **Currency Indicators**: Visual badges showing original currency when different from display currency
 
 ## 🛠 Technical Stack
 
@@ -30,6 +40,8 @@ A modern, professional NextJS expense tracking application that helps users mana
 - **Forms**: React Hook Form with Zod validation
 - **Icons**: Lucide React
 - **Storage**: localStorage for data persistence
+- **Internationalization**: Custom React Context with type-safe translations
+- **Currency Conversion**: Built-in exchange rate system with fallback formatting
 
 ## 📋 Categories
 
@@ -125,12 +137,13 @@ npm start
 
 ## 📊 Data Structure
 
-Expenses are stored with the following structure:
+Expenses are stored with the following enhanced structure:
 ```typescript
 interface Expense {
   id: string;              // Unique identifier
   date: string;            // ISO date string
-  amount: number;          // Expense amount in dollars
+  amount: number;          // Expense amount in original currency
+  currency: SupportedCurrency; // Currency code (USD, EUR, GBP, etc.)
   category: ExpenseCategory; // One of the 6 categories
   description: string;     // User-provided description
   createdAt: string;       // Creation timestamp
@@ -138,20 +151,35 @@ interface Expense {
 }
 ```
 
+### Supported Currencies
+- **USD** - US Dollar ($)
+- **EUR** - Euro (€)
+- **GBP** - British Pound (£)
+- **JPY** - Japanese Yen (¥)
+- **CAD** - Canadian Dollar (C$)
+- **AUD** - Australian Dollar (A$)
+- **CHF** - Swiss Franc (CHF)
+- **CNY** - Chinese Yuan (¥)
+- **MXN** - Mexican Peso ($)
+- **BRL** - Brazilian Real (R$)
+
 ## 🧪 Testing the Application
 
 ### Manual Testing Checklist
 
 1. **Adding Expenses**
-   - [ ] Add expense with all fields filled
+   - [ ] Add expense with all fields filled including currency selection
    - [ ] Try submitting with empty fields (should show validation errors)
    - [ ] Add expense with negative amount (should show validation error)
-   - [ ] Add expenses in different categories
+   - [ ] Add expenses in different categories and currencies
+   - [ ] Test currency dropdown functionality
 
 2. **Viewing Expenses**
    - [ ] Navigate to expenses list
    - [ ] Verify expenses are sorted by date (newest first)
-   - [ ] Check that all expense details display correctly
+   - [ ] Check that all expense details display correctly with currency conversion
+   - [ ] Verify currency badges appear for expenses in different currencies
+   - [ ] Test that converted amounts show alongside original amounts
 
 3. **Filtering & Search**
    - [ ] Filter by each category
@@ -168,26 +196,36 @@ interface Expense {
    - [ ] Cancel deletion when prompted
 
 5. **Dashboard**
-   - [ ] View summary cards with correct totals
-   - [ ] Check pie chart shows category breakdown
-   - [ ] Verify bar chart shows monthly trends
-   - [ ] Add expenses and see dashboard update
+   - [ ] View summary cards with correct totals in preferred currency
+   - [ ] Check pie chart shows category breakdown with localized labels
+   - [ ] Verify bar chart shows monthly trends with currency formatting
+   - [ ] Add expenses in different currencies and see dashboard update with conversions
 
-6. **Export Functionality**
-   - [ ] Export all expenses to CSV
+6. **Internationalization & Currency**
+   - [ ] Click settings gear icon to open locale selector
+   - [ ] Switch between English and Spanish languages
+   - [ ] Verify all UI text updates to selected language
+   - [ ] Change currency and verify all amounts convert properly
+   - [ ] Test that preferences persist after page reload
+   - [ ] Verify date formatting changes with locale
+   - [ ] Check currency symbols and formatting are correct
+
+7. **Export Functionality**
+   - [ ] Export all expenses to CSV with currency information
    - [ ] Apply filters and export filtered results
-   - [ ] Open CSV file and verify data format
+   - [ ] Open CSV file and verify data format includes currency column
 
-7. **Responsive Design**
+8. **Responsive Design**
    - [ ] Test on mobile device or browser dev tools
-   - [ ] Verify navigation menu works on mobile
-   - [ ] Check all forms are usable on small screens
+   - [ ] Verify navigation menu works on mobile with settings panel
+   - [ ] Check all forms are usable on small screens including currency dropdown
    - [ ] Ensure charts display properly on all screen sizes
 
-8. **Data Persistence**
+9. **Data Persistence & Migration**
    - [ ] Add expenses and refresh the page
    - [ ] Close and reopen browser
-   - [ ] Verify all data persists correctly
+   - [ ] Verify all data persists correctly with currency information
+   - [ ] Test automatic migration from old data format (if applicable)
 
 ## 🔧 Development
 
@@ -201,19 +239,23 @@ interface Expense {
 ```
 src/
 ├── app/                 # NextJS app router
-├── components/          # React components
+├── components/          # React components (including LocaleSelector)
+├── contexts/            # React contexts (I18nContext)
 ├── hooks/              # Custom React hooks
-├── lib/                # Utility functions and storage
-└── types/              # TypeScript type definitions
+├── lib/                # Utility functions, storage, and i18n utilities
+├── translations/        # Translation files for supported languages
+└── types/              # TypeScript type definitions (including i18n types)
 ```
 
 ## 💾 Data Storage
 
 This application uses localStorage for data persistence, which means:
 - Data is stored locally in your browser
-- Data persists between browser sessions
+- Data persists between browser sessions  
 - Data is not shared between different browsers/devices
 - No server or database required
+- **Automatic migration**: Existing data is automatically migrated to include currency fields
+- **Backward compatibility**: Works seamlessly with expenses created before currency support
 
 For production use, you could easily extend this to use a backend API by modifying the storage utility functions.
 
@@ -225,9 +267,12 @@ Potential features that could be added:
 - Recurring expense management  
 - Advanced reporting and insights
 - Receipt photo uploads
-- Multi-currency support
-- Data backup/restore
+- **Live exchange rates** via API integration
+- **Additional languages** (French, German, Portuguese with full translations)
+- **Custom categories** with user-defined names
+- **Income tracking** alongside expenses
+- Data backup/restore to cloud storage
 
 ---
 
-**ExpenseTracker** - Take control of your personal finances with professional-grade expense tracking. 📊💰
+**ExpenseTracker** - Take control of your personal finances with professional-grade expense tracking featuring multilingual and multicurrency support. 🌍💰📊
