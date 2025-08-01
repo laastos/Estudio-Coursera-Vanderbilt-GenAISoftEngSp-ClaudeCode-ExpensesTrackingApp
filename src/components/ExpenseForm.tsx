@@ -62,16 +62,16 @@ export default function ExpenseForm({ onSubmit, initialData, isEditing = false, 
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="glass-card rounded-2xl p-6 hover-lift animate-fade-in">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-gray-900">
+        <h2 className="text-xl font-semibold text-white">
           {isEditing ? t.expense.editExpense : t.expense.addExpense}
         </h2>
         {isEditing && onCancel && (
           <button
             type="button"
             onClick={onCancel}
-            className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+            className="p-2 text-white/70 hover:text-white transition-colors hover-lift rounded-xl"
           >
             <X className="h-5 w-5" />
           </button>
@@ -81,7 +81,7 @@ export default function ExpenseForm({ onSubmit, initialData, isEditing = false, 
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="date" className="block text-sm font-medium text-white/90 mb-1">
               {t.common.date}
             </label>
             <input
@@ -89,17 +89,17 @@ export default function ExpenseForm({ onSubmit, initialData, isEditing = false, 
               id="date"
               {...register('date')}
               className={cn(
-                "w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
-                errors.date ? "border-red-300" : "border-gray-300"
+                "w-full px-3 py-2 glass border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-all duration-200",
+                errors.date ? "border-red-400" : "border-white/20"
               )}
             />
             {errors.date && (
-              <p className="mt-1 text-sm text-red-600">{errors.date.message}</p>
+              <p className="mt-1 text-sm text-red-400">{errors.date.message}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="amount" className="block text-sm font-medium text-white/90 mb-1">
               {t.common.amount}
             </label>
             <input
@@ -109,25 +109,25 @@ export default function ExpenseForm({ onSubmit, initialData, isEditing = false, 
               placeholder="0.00"
               {...register('amount')}
               className={cn(
-                "w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
-                errors.amount ? "border-red-300" : "border-gray-300"
+                "w-full px-3 py-2 glass border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-all duration-200",
+                errors.amount ? "border-red-400" : "border-white/20"
               )}
             />
             {errors.amount && (
-              <p className="mt-1 text-sm text-red-600">{errors.amount.message}</p>
+              <p className="mt-1 text-sm text-red-400">{errors.amount.message}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="currency" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="currency" className="block text-sm font-medium text-white/90 mb-1">
               {t.settings.currency}
             </label>
             <select
               id="currency"
               {...register('currency')}
               className={cn(
-                "w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
-                errors.currency ? "border-red-300" : "border-gray-300"
+                "w-full px-3 py-2 glass border rounded-xl select-accessible focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-all duration-200",
+                errors.currency ? "border-red-400" : ""
               )}
             >
               {SUPPORTED_CURRENCIES.map((curr) => (
@@ -137,21 +137,21 @@ export default function ExpenseForm({ onSubmit, initialData, isEditing = false, 
               ))}
             </select>
             {errors.currency && (
-              <p className="mt-1 text-sm text-red-600">{errors.currency.message}</p>
+              <p className="mt-1 text-sm text-red-400">{errors.currency.message}</p>
             )}
           </div>
         </div>
 
         <div>
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="category" className="block text-sm font-medium text-white/90 mb-1">
             {t.common.category}
           </label>
           <select
             id="category"
             {...register('category')}
             className={cn(
-              "w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
-              errors.category ? "border-red-300" : "border-gray-300"
+              "w-full px-3 py-2 glass border rounded-xl select-accessible focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-all duration-200",
+              errors.category ? "border-red-400" : ""
             )}
           >
             {categories.map((category) => (
@@ -161,12 +161,12 @@ export default function ExpenseForm({ onSubmit, initialData, isEditing = false, 
             ))}
           </select>
           {errors.category && (
-            <p className="mt-1 text-sm text-red-600">{errors.category.message}</p>
+            <p className="mt-1 text-sm text-red-400">{errors.category.message}</p>
           )}
         </div>
 
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="description" className="block text-sm font-medium text-white/90 mb-1">
             {t.common.description}
           </label>
           <input
@@ -175,12 +175,12 @@ export default function ExpenseForm({ onSubmit, initialData, isEditing = false, 
             placeholder={t.filters.searchPlaceholder}
             {...register('description')}
             className={cn(
-              "w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
-              errors.description ? "border-red-300" : "border-gray-300"
+              "w-full px-3 py-2 glass border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-all duration-200",
+              errors.description ? "border-red-400" : "border-white/20"
             )}
           />
           {errors.description && (
-            <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
+            <p className="mt-1 text-sm text-red-400">{errors.description.message}</p>
           )}
         </div>
 
@@ -189,10 +189,10 @@ export default function ExpenseForm({ onSubmit, initialData, isEditing = false, 
             type="submit"
             disabled={isSubmitting}
             className={cn(
-              "flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md font-medium transition-colors",
+              "flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-500 to-purple-600 text-white rounded-xl font-medium transition-all duration-200 hover-lift shadow-lg",
               isSubmitting
                 ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                : "hover:from-violet-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2"
             )}
           >
             <Plus className="h-4 w-4" />
@@ -203,7 +203,7 @@ export default function ExpenseForm({ onSubmit, initialData, isEditing = false, 
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+              className="px-6 py-3 glass border border-white/20 text-white rounded-xl font-medium hover-lift transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2"
             >
               {t.common.cancel}
             </button>

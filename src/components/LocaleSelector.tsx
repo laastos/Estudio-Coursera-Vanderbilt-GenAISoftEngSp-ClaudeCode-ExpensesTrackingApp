@@ -43,7 +43,7 @@ export default function LocaleSelector() {
                 <select
                   value={locale}
                   onChange={(e) => setLocale(e.target.value as SupportedLocale)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border rounded-xl select-accessible focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-all duration-200 shadow-sm"
                 >
                   {SUPPORTED_LOCALES.map((loc) => (
                     <option key={loc} value={loc}>
@@ -62,7 +62,7 @@ export default function LocaleSelector() {
                 <select
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value as SupportedCurrency)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border rounded-xl select-accessible focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-all duration-200 shadow-sm"
                 >
                   {SUPPORTED_CURRENCIES.map((curr) => (
                     <option key={curr} value={curr}>

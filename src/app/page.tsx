@@ -8,6 +8,7 @@ import Navigation from '@/components/Navigation';
 import Dashboard from '@/components/Dashboard';
 import ExpenseForm from '@/components/ExpenseForm';
 import ExpenseList from '@/components/ExpenseList';
+import FloatingActionButton from '@/components/FloatingActionButton';
 
 type View = 'dashboard' | 'expenses' | 'add';
 
@@ -58,25 +59,25 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       <Navigation currentView={currentView} onViewChange={setCurrentView} />
       
-      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 relative">
         {currentView === 'dashboard' && (
-          <div>
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900">{t.navigation.dashboard}</h1>
-              <p className="mt-2 text-gray-600">Overview of your spending</p>
+          <div className="animate-fade-in">
+            <div className="mb-8 text-center">
+              <h1 className="text-4xl font-bold gradient-text mb-2">{t.navigation.dashboard}</h1>
+              <p className="text-white/80 text-lg">Your financial journey at a glance</p>
             </div>
             <Dashboard expenses={expenses} />
           </div>
         )}
 
         {currentView === 'expenses' && (
-          <div>
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900">{t.navigation.expenses}</h1>
-              <p className="mt-2 text-gray-600">View and manage your expenses</p>
+          <div className="animate-fade-in">
+            <div className="mb-8 text-center">
+              <h1 className="text-4xl font-bold gradient-text mb-2">{t.navigation.expenses}</h1>
+              <p className="text-white/80 text-lg">Track and manage all your expenses</p>
             </div>
             <ExpenseList 
               expenses={expenses} 
@@ -87,30 +88,39 @@ export default function Home() {
         )}
 
         {currentView === 'add' && (
-          <div>
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900">
+          <div className="animate-fade-in">
+            <div className="mb-8 text-center">
+              <h1 className="text-4xl font-bold gradient-text mb-2">
                 {editingExpense ? t.expense.editExpense : t.expense.addExpense}
               </h1>
-              <p className="mt-2 text-gray-600">
+              <p className="text-white/80 text-lg">
                 {editingExpense ? 'Update your expense details' : 'Record a new expense'}
               </p>
             </div>
-            <ExpenseForm 
-              onSubmit={editingExpense ? handleUpdateExpense : handleAddExpense}
-              initialData={editingExpense ? {
-                date: editingExpense.date,
-                amount: editingExpense.amount.toString(),
-                currency: editingExpense.currency,
-                category: editingExpense.category,
-                description: editingExpense.description,
-              } : undefined}
-              isEditing={!!editingExpense}
-              onCancel={editingExpense ? handleCancelEdit : undefined}
-            />
+            <div className="max-w-2xl mx-auto">
+              <ExpenseForm 
+                onSubmit={editingExpense ? handleUpdateExpense : handleAddExpense}
+                initialData={editingExpense ? {
+                  date: editingExpense.date,
+                  amount: editingExpense.amount.toString(),
+                  currency: editingExpense.currency,
+                  category: editingExpense.category,
+                  description: editingExpense.description,
+                } : undefined}
+                isEditing={!!editingExpense}
+                onCancel={editingExpense ? handleCancelEdit : undefined}
+              />
+            </div>
           </div>
         )}
       </main>
+
+      {/* Floating Action Button */}
+      <FloatingActionButton
+        onAddExpense={() => setCurrentView('add')}
+        onViewDashboard={() => setCurrentView('dashboard')}
+        onOpenSettings={() => {/* TODO: Implement settings modal */}}
+      />
     </div>
   );
 }

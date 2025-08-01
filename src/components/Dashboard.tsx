@@ -64,14 +64,14 @@ export default function Dashboard({ expenses }: DashboardProps) {
     icon: React.ElementType; 
     color: string;
   }) => (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="glass-card rounded-2xl p-6 hover-lift animate-slide-up">
       <div className="flex items-center">
-        <div className={`flex-shrink-0 p-3 rounded-lg ${color}`}>
+        <div className={`flex-shrink-0 p-3 rounded-xl ${color} shadow-lg`}>
           <Icon className="h-6 w-6 text-white" />
         </div>
         <div className="ml-4">
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
+          <p className="text-sm font-medium text-white/70">{title}</p>
+          <p className="text-2xl font-bold text-white">{value}</p>
         </div>
       </div>
     </div>
@@ -107,8 +107,8 @@ export default function Dashboard({ expenses }: DashboardProps) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.dashboard.spendingByCategory}</h3>
+        <div className="glass-card rounded-2xl p-6 hover-lift animate-slide-up">
+          <h3 className="text-lg font-semibold text-white mb-4">{t.dashboard.spendingByCategory}</h3>
           {chartData.length > 0 ? (
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -127,33 +127,71 @@ export default function Dashboard({ expenses }: DashboardProps) {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => formatCurrency(value as number)} />
+                  <Tooltip 
+                    formatter={(value) => formatCurrency(value as number)} 
+                    contentStyle={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      backdropFilter: 'blur(16px)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      borderRadius: '12px',
+                      color: 'white'
+                    }}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             </div>
           ) : (
-            <div className="h-64 flex items-center justify-center text-gray-500">
+            <div className="h-64 flex items-center justify-center text-white/60">
               <p>{t.dashboard.noExpenses}</p>
             </div>
           )}
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.dashboard.monthlySpendingTrend}</h3>
+        <div className="glass-card rounded-2xl p-6 hover-lift animate-slide-up">
+          <h3 className="text-lg font-semibold text-white mb-4">{t.dashboard.monthlySpendingTrend}</h3>
           {monthlyData.some(data => data.amount > 0) ? (
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={monthlyData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis tickFormatter={(value) => formatCurrency(value)} />
-                  <Tooltip formatter={(value) => formatCurrency(value as number)} />
-                  <Bar dataKey="amount" fill="#3B82F6" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.1)" />
+                  <XAxis 
+                    dataKey="month" 
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: 'rgba(255, 255, 255, 0.7)', fontSize: 12 }}
+                  />
+                  <YAxis 
+                    tickFormatter={(value) => formatCurrency(value)}
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: 'rgba(255, 255, 255, 0.7)', fontSize: 12 }}
+                  />
+                  <Tooltip 
+                    formatter={(value) => formatCurrency(value as number)}
+                    contentStyle={{
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      backdropFilter: 'blur(16px)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      borderRadius: '12px',
+                      color: 'white'
+                    }}
+                  />
+                  <Bar 
+                    dataKey="amount" 
+                    fill="url(#barGradient)"
+                    radius={[8, 8, 0, 0]}
+                  />
+                  <defs>
+                    <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#818CF8" />
+                      <stop offset="100%" stopColor="#6366F1" />
+                    </linearGradient>
+                  </defs>
                 </BarChart>
               </ResponsiveContainer>
             </div>
           ) : (
-            <div className="h-64 flex items-center justify-center text-gray-500">
+            <div className="h-64 flex items-center justify-center text-white/60">
               <p>{t.dashboard.noSpendingData}</p>
             </div>
           )}
@@ -161,19 +199,19 @@ export default function Dashboard({ expenses }: DashboardProps) {
       </div>
 
       {chartData.length > 0 && (
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.dashboard.categoryBreakdown}</h3>
+        <div className="glass-card rounded-2xl p-6 hover-lift animate-slide-up">
+          <h3 className="text-lg font-semibold text-white mb-4">{t.dashboard.categoryBreakdown}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {chartData.map((category) => (
-              <div key={category.name} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+              <div key={category.name} className="flex items-center justify-between p-3 glass border border-white/20 rounded-xl hover-lift transition-all duration-200">
                 <div className="flex items-center space-x-3">
                   <div 
-                    className="w-4 h-4 rounded-full"
+                    className="w-4 h-4 rounded-full shadow-lg"
                     style={{ backgroundColor: category.color }}
                   />
-                  <span className="font-medium text-gray-900">{t.categories[category.name as ExpenseCategory]}</span>
+                  <span className="font-medium text-white">{t.categories[category.name as ExpenseCategory]}</span>
                 </div>
-                <span className="font-bold text-gray-900">
+                <span className="font-bold text-white">
                   {formatCurrency(category.value)}
                 </span>
               </div>
